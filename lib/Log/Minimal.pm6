@@ -116,13 +116,13 @@ method !print(DateTime :$time, LogLevel :$log_level, Str :$messages, Str :$trace
 
 =begin pod
 
-=head1 WIP
-
-WIP WIP WIP
-
 =head1 NAME
 
 Log::Minimal - Minimal logger
+
+=head1 WIP
+
+WIP WIP WIP
 
 =head1 SYNOPSIS
 

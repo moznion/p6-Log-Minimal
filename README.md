@@ -1,7 +1,12 @@
 NAME
 ====
 
-Log::Minimal - blah blah blah
+Log::Minimal - Minimal logger
+
+WIP
+===
+
+WIP WIP WIP
 
 SYNOPSIS
 ========
@@ -11,7 +16,7 @@ SYNOPSIS
 DESCRIPTION
 ===========
 
-Log::Minimal is ...
+Log::Minimal is perl6 port of Log::Minimal of perl5.
 
 COPYRIGHT AND LICENSE
 =====================

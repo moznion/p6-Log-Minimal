@@ -1,0 +1,14 @@
+{
+  "name" : "Log::Minimal",
+  "source-url" : "",
+  "perl" : "v6",
+  "provides" : {
+    "Log::Minimal" : "lib/Log/Minimal.pm6"
+  },
+  "depends" : [ ],
+  "description" : "",
+  "version" : "*",
+  "authors" : [
+    "moznion"
+  ]
+}

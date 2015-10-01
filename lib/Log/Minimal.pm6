@@ -29,7 +29,7 @@ method debugf(*@text) {
 }
 
 method croakf(*@text) {
-    # $.default_log_level = DEBUG; # TODO restore by defer
+    temp $.default_log_level = DEBUG;
     self!log(ERROR, False, True, @text);
 }
 
@@ -53,7 +53,7 @@ method debugff(*@text) {
 }
 
 method croakff(*@text) {
-    # $.default_log_level = DEBUG; # TODO restore by defer
+    temp $.default_log_level = DEBUG;
     self!log(ERROR, True, True, @text);
 }
 

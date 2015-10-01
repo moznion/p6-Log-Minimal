@@ -1,7 +1,17 @@
 use v6;
+use Terminal::ANSIColor;
+
 unit class Log::Minimal;
 
 our enum LogLevel <MUTE DEBUG INFO WARN CRITICAL ERROR>;
+
+our $colors = {
+    INFO     => 'green',
+    DEBUG    => 'red on_white',
+    WARN     => 'black on_yellow',
+    CRITICAL => 'black on_red',
+    ERROR    => 'red on_black',
+};
 
 has LogLevel $.default_log_level is rw = DEBUG;
 has Bool $.escape_whitespace = True;
@@ -98,6 +108,7 @@ method !log(LogLevel $log_level, Bool $full_trace, Bool $die, *@text) {
     }
 
     if ($.color) {
+        $messages = colored($messages, $colors{$log_level.key});
     }
 
     self!print(:$time, :$log_level, :$messages, :$trace, :$die);

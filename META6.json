@@ -5,7 +5,7 @@
   "provides" : {
     "Log::Minimal" : "lib/Log/Minimal.pm6"
   },
-  "depends" : [ ],
+  "depends" : [ "Terminal::ANSIColor" ],
   "description" : "",
   "version" : "*",
   "authors" : [

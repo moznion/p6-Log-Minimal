@@ -67,33 +67,28 @@ method !log(LogLevel $log_level, Bool $full_trace, Bool $die, *@text) {
 
     my $trace = '';
     if $full_trace {
+        die;
         CATCH {
             default {
                 my $bts = .backtrace.full.lines.reverse;
                 $trace = $bts[$.trace_level..*-1].join("\n").trim;
             }
         }
-        die;
     } else {
+        die;
         CATCH {
             default {
                 my @bts = .backtrace.full.lines.reverse;
                 $trace = @bts[$.trace_level].trim;
             }
         }
-        die;
     }
 
     my $messages = '';
     if (@text == 1 && defined @text[0]) {
-        $messages = @text[0];
-        # TODO support AUTODUMP
-        # $messages = $AUTODUMP ? ''.Log::Minimal::Dumper->new($_[0]) : $_[0];
-    }
-    elsif (@text >= 2)  {
+        $messages ~= @text[0];
+    } elsif (@text >= 2)  {
         $messages = sprintf(@text.shift, @text);
-        # TODO support AUTODUMP
-        # $messages = sprintf(shift, map { $AUTODUMP ? Log::Minimal::Dumper->new($_) : $_ } @_);
     }
 
     if ($.escape_whitespace) {
@@ -103,7 +98,6 @@ method !log(LogLevel $log_level, Bool $full_trace, Bool $die, *@text) {
     }
 
     if ($.color) {
-        # TODO
     }
 
     self!print(:$time, :$log_level, :$messages, :$trace, :$die);

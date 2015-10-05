@@ -17,7 +17,7 @@ has LogLevel $.default_log_level is rw = DEBUG;
 has Bool $.escape_whitespace = True;
 has Bool $.color = %*ENV<LM_COLOR> ?? True !! False;
 has Str $.env_debug = "LM_DEBUG";
-has Int $.trace_level = 0;
+has Int $.default_trace_level = 0;
 
 method critf(*@text) {
     self!log(CRITICAL, False, False, @text);
@@ -78,7 +78,7 @@ method !log(LogLevel $log_level, Bool $full_trace, Bool $die, *@text) {
     my $trace = '';
     if $full_trace {
         my @bts = ();
-        my $i = 4;
+        my $i = $.default_trace_level + 4;
         loop {
             my $bt = callframe($i++);
             @bts.push($bt);
@@ -89,7 +89,7 @@ method !log(LogLevel $log_level, Bool $full_trace, Bool $die, *@text) {
             }
         }
     } else {
-        my $bt = callframe(3);
+        my $bt = callframe($.default_trace_level + 3);
         $trace = sprintf('at %s line %s', $bt.file, $bt.line);
     }
 

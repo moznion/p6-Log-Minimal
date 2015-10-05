@@ -38,7 +38,7 @@ method debugf(*@text) {
     }
 }
 
-method croakf(*@text) {
+method errorf(*@text) {
     temp $.default_log_level = DEBUG;
     self!log(ERROR, False, True, @text);
 }
@@ -62,7 +62,7 @@ method debugff(*@text) {
     }
 }
 
-method croakff(*@text) {
+method errorff(*@text) {
     temp $.default_log_level = DEBUG;
     self!log(ERROR, True, True, @text);
 }
@@ -77,21 +77,20 @@ method !log(LogLevel $log_level, Bool $full_trace, Bool $die, *@text) {
 
     my $trace = '';
     if $full_trace {
-        die;
+        my @bts = ();
+        my $i = 4;
+        loop {
+            my $bt = callframe($i++);
+            @bts.push($bt);
+        }
         CATCH {
-            default {
-                my $bts = .backtrace.full.lines.reverse;
-                $trace = $bts[$.trace_level..*-1].join("\n").trim;
+            when 'ctxcaller needs an MVMContext' {
+                $trace = 'at ' ~ @bts[0..*-2].map(-> $bt {sprintf('%s line %s', $bt.file, $bt.line)}).join(', ');
             }
         }
     } else {
-        die;
-        CATCH {
-            default {
-                my @bts = .backtrace.full.lines.reverse;
-                $trace = @bts[$.trace_level].trim;
-            }
-        }
+        my $bt = callframe(3);
+        $trace = sprintf('at %s line %s', $bt.file, $bt.line);
     }
 
     my $messages = '';

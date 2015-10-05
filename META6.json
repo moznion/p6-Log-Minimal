@@ -6,6 +6,7 @@
     "Log::Minimal" : "lib/Log/Minimal.pm6"
   },
   "depends" : [ "Terminal::ANSIColor" ],
+  "test-depends" : [ "IO::Capture::Simple" ],
   "description" : "",
   "version" : "*",
   "authors" : [

@@ -33,7 +33,7 @@ method infof(*@text) {
 
 method debugf(*@text) {
     my Bool $env_debug = %*ENV{$.env_debug} ?? True !! False;
-    if $env_debug || DEBUG.value >= $.default_log_level.value {
+    if $env_debug && DEBUG.value >= $.default_log_level.value {
         self!log(DEBUG, False, False, @text);
     }
 }
@@ -57,7 +57,7 @@ method infoff(*@text) {
 
 method debugff(*@text) {
     my Bool $env_debug = %*ENV{$.env_debug} ?? True !! False;
-    if $env_debug || DEBUG.value >= $.default_log_level.value {
+    if $env_debug && DEBUG.value >= $.default_log_level.value {
         self!log(DEBUG, True, False, @text);
     }
 }
@@ -136,19 +136,24 @@ method !print(DateTime :$time, LogLevel :$log_level, Str :$messages, Str :$trace
 
 =head1 NAME
 
-Log::Minimal - Minimal logger
-
-=head1 WIP
-
-WIP WIP WIP
+Log::Minimal - Minimal logger for perl6
 
 =head1 SYNOPSIS
 
   use Log::Minimal;
+  my $l = Log::Minimal.new;
+  $l.critf('critical');
 
 =head1 DESCRIPTION
 
-Log::Minimal is perl6 port of Log::Minimal of perl5.
+Log::Minimal is a minimal and customizable logger for perl6.
+This logger provides logging functions  according to logging level with line (or stack) trace.
+
+This package is perl6 port of Log::Minimal of perl5.
+
+=head1 METHODS
+
+=head1 CONFIGURATIONS
 
 =head1 COPYRIGHT AND LICENSE
 

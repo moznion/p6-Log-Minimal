@@ -43,11 +43,12 @@ subtest {
 }, 'test for infof';
 
 subtest {
+    temp %*ENV<LM_DEBUG> = 1;
     my $out = capture_stderr {
         $log.debugf('debug');
     };
 
-    if $out ~~ rx{^<[0..9]> ** 4\-<[0..9]> ** 2\-<[0..9]> ** 2T<[0..9]> ** 2\:<[0..9]> ** 2\:<[0..9]> ** 2Z' '\[DEBUG\]' '(.+)' 'at' 't\/05\-color\.t' 'line' '47\n$} {
+    if $out ~~ rx{^<[0..9]> ** 4\-<[0..9]> ** 2\-<[0..9]> ** 2T<[0..9]> ** 2\:<[0..9]> ** 2\:<[0..9]> ** 2Z' '\[DEBUG\]' '(.+)' 'at' 't\/05\-color\.t' 'line' '48\n$} {
         is $0, "\x[1b][31;47mdebug\x[1b][0m";
     } else {
         ok False, 'Not matched to regex';

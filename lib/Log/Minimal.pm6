@@ -18,6 +18,8 @@ has Bool $.escape_whitespace = True;
 has Bool $.color = %*ENV<LM_COLOR> ?? True !! False;
 has Str $.env_debug = "LM_DEBUG";
 has Int $.default_trace_level = 0;
+has Sub $.print is rw; # (DateTime :$time, Str :$messages, Str :$trace); <== not yet implemented...
+has Sub $.die is rw; # (DateTime :$time, Str :$messages, Str :$trace); <== not yet implemented...
 
 method critf(*@text) {
     self!log(CRITICAL, False, False, @text);
@@ -110,7 +112,11 @@ method !log(LogLevel $log_level, Bool $full_trace, Bool $die, *@text) {
         $messages = colored($messages, $colors{$log_level.key});
     }
 
-    self!print(:$time, :$log_level, :$messages, :$trace, :$die);
+    if ($die) {
+        self!die(:$time, :$log_level, :$messages, :$trace);
+    } else {
+        self!print(:$time, :$log_level, :$messages, :$trace);
+    }
 }
 
 my class Log::Minimal::Error is Exception {
@@ -124,12 +130,22 @@ my class Log::Minimal::Error is Exception {
     }
 }
 
-method !print(DateTime :$time, LogLevel :$log_level, Str :$messages, Str :$trace, Bool :$die) {
-    if ($die) {
-        Log::Minimal::Error.new(message => "$time [$log_level] $messages $trace").die;
-    } else {
-        note "$time [$log_level] $messages $trace";
+method !print(DateTime :$time, LogLevel :$log_level, Str :$messages, Str :$trace) {
+    my $format = "$time [$log_level] $messages $trace";
+    if $.print {
+        $format = $.print.(:$time, :$log_level, :$messages, :$trace);
     }
+
+    note $format;
+}
+
+method !die(DateTime :$time, LogLevel :$log_level, Str :$messages, Str :$trace) {
+    my $format = "$time [$log_level] $messages $trace";
+    if $.die {
+        $format = $.die.(:$time, :$log_level, :$messages, :$trace)
+    }
+
+    Log::Minimal::Error.new(message => $format).die;
 }
 
 =begin pod

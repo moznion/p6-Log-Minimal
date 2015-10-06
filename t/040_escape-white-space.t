@@ -8,7 +8,7 @@ subtest {
     my $out = capture_stderr {
         $log.critf("s\r\n\te");
     };
-    like $out, rx{^<[0..9]> ** 4\-<[0..9]> ** 2\-<[0..9]> ** 2T<[0..9]> ** 2\:<[0..9]> ** 2\:<[0..9]> ** 2Z' '\[CRITICAL\]' 's\\r\\n\\te' 'at' 't'/'04'-'escape'-'white'-'space'.'t' 'line' '9\n$};
+    like $out, rx{^<[0..9]> ** 4\-<[0..9]> ** 2\-<[0..9]> ** 2T<[0..9]> ** 2\:<[0..9]> ** 2\:<[0..9]> ** 2Z' '\[CRITICAL\]' 's\\r\\n\\te' 'at' 't'/'040_escape'-'white'-'space'.'t' 'line' '9\n$};
 }, 'default, escape white space';
 
 subtest {
@@ -16,7 +16,7 @@ subtest {
     my $out = capture_stderr {
         $log.critf("s\r\n\te");
     };
-    like $out, rx{^<[0..9]> ** 4\-<[0..9]> ** 2\-<[0..9]> ** 2T<[0..9]> ** 2\:<[0..9]> ** 2\:<[0..9]> ** 2Z' '\[CRITICAL\]' 's\r\n\te' 'at' 't'/'04'-'escape'-'white'-'space'.'t' 'line' '17\n$};
+    like $out, rx{^<[0..9]> ** 4\-<[0..9]> ** 2\-<[0..9]> ** 2T<[0..9]> ** 2\:<[0..9]> ** 2\:<[0..9]> ** 2Z' '\[CRITICAL\]' 's\r\n\te' 'at' 't'/'040_escape'-'white'-'space'.'t' 'line' '17\n$};
 }, 'do not escape white space';
 
 done-testing;

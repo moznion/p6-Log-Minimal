@@ -12,6 +12,6 @@ subtest {
     my $out = capture_stderr {
         $log.warnf('msg');
     }
-    like $out, rx{at' 't\/08\-custom\-format\.t' 'line' '13' 'msg' '\[WARN\]' '<[0..9]> ** 4\-<[0..9]> ** 2\-<[0..9]> ** 2T<[0..9]> ** 2\:<[0..9]> ** 2\:<[0..9]> ** 2Z\n$}
+    like $out, rx{at' 't\/080_custom\-format\.t' 'line' '13' 'msg' '\[WARN\]' '<[0..9]> ** 4\-<[0..9]> ** 2\-<[0..9]> ** 2T<[0..9]> ** 2\:<[0..9]> ** 2\:<[0..9]> ** 2Z\n$}
 }, 'custom print';
 

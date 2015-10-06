@@ -8,6 +8,6 @@ subtest {
     my $out = capture_stderr {
         $log.critf('critical');
     };
-    like $out, rx{^<[0..9]> ** 4\-<[0..9]> ** 2\-<[0..9]> ** 2T<[0..9]> ** 2\:<[0..9]> ** 2\:<[0..9]> ** 2Z' '\[CRITICAL\]' 'critical' 'at' 't\/06\-default\-trace\-level\.t' 'line' '8\n$}
+    like $out, rx{^<[0..9]> ** 4\-<[0..9]> ** 2\-<[0..9]> ** 2T<[0..9]> ** 2\:<[0..9]> ** 2\:<[0..9]> ** 2Z' '\[CRITICAL\]' 'critical' 'at' 't\/060_default\-trace\-level\.t' 'line' '8\n$}
 }, 'test for default_trace_level';
 

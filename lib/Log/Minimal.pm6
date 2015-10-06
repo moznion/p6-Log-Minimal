@@ -316,6 +316,16 @@ Support levels are DEBUG, INFO, WARN, CRITICAL, Error and MUTE. These levels are
 If MUTE is set, no output except C<errorf> and C<errorff>.
 Default log level is DEBUG.
 
+=head2 C<$.autodump>
+
+Serialize message with C<.perl>.
+
+  my $log = Log::Minimal.new;
+  $log.warnf("%s", {foo => 'bar'}); # foo\tbar
+
+  temp $log.autodump = True;
+  warnf("dump is %s", {foo=>'bar'}); # :foo("bar")
+
 =head2 C<$.default_trace_level>
 
 This variable determines how many additional call frames are to be skipped.

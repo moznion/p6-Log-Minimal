@@ -178,6 +178,17 @@ Level for output log.
 
 Support levels are DEBUG, INFO, WARN, CRITICAL, Error and MUTE. These levels are exposed by enum (e.g. Log::Minimal::DEBUG). If MUTE is set, no output except `errorf` and `errorff`. Default log level is DEBUG.
 
+`$.autodump`
+------------
+
+Serialize message with `.perl`.
+
+  my $log = Log::Minimal.new;
+  $log.warnf("%s", {foo => 'bar'}); # foo\tbar
+
+  temp $log.autodump = True;
+  warnf("dump is %s", {foo=>'bar'}); # :foo("bar")
+
 `$.default_trace_level`
 -----------------------
 

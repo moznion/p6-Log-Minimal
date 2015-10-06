@@ -2,17 +2,18 @@
   "name" : "Log::Minimal",
   "source-url" : "git://github.com/moznion/p6-Log-Minimal.git",
   "perl" : "v6",
+  "build-depends" : [ ],
   "provides" : {
     "Log::Minimal" : "lib/Log/Minimal.pm6"
   },
-  "support" : {
-      "bugtracker" : "https://github.com/moznion/p6-Log-Minimal/issues"
-  },
-  "depends" : [ "Terminal::ANSIColor" ],
-  "test-depends" : [ "IO::Capture::Simple" ],
+  "depends" : [
+    "Terminal::ANSIColor"
+  ],
   "description" : "Minimal and customizable logger for perl6",
+  "test-depends" : [
+    "IO::Capture::Simple"
+  ],
   "version" : "*",
-  "auth": "github:moznion",
   "authors" : [
     "moznion"
   ]

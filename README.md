@@ -1,4 +1,6 @@
-NAME [![Build Status](https://travis-ci.org/moznion/p6-Log-Minimal.svg?branch=master)](https://travis-ci.org/moznion/p6-Log-Minimal)
+[![Build Status](https://travis-ci.org/moznion/p6-Log-Minimal.svg?branch=master)](https://travis-ci.org/moznion/p6-Log-Minimal)
+
+NAME
 ====
 
 Log::Minimal - Minimal and customizable logger for perl6
@@ -183,11 +185,11 @@ Support levels are DEBUG, INFO, WARN, CRITICAL, Error and MUTE. These levels are
 
 Serialize message with `.perl`.
 
-  my $log = Log::Minimal.new;
-  $log.warnf("%s", {foo => 'bar'}); # foo\tbar
+    my $log = Log::Minimal.new;
+    $log.warnf("%s", {foo => 'bar'}); # foo\tbar
 
-  temp $log.autodump = True;
-  warnf("dump is %s", {foo=>'bar'}); # :foo("bar")
+    temp $log.autodump = True;
+    warnf("dump is %s", {foo=>'bar'}); # :foo("bar")
 
 `$.default_trace_level`
 -----------------------

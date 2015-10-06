@@ -201,6 +201,17 @@ This variable determines how many additional call frames are to be skipped. Defa
 
 If this value is true, whitespace other than space will be represented as [\n\t\r]. Defaults to True.
 
+`$.timezone`
+------------
+
+Default, this value is Nil means Log::Minimal determines timezone automatically from your environment.
+
+If you specify this value, Log::Minimal uses that timezone.
+
+    my $timezone = DateTime.new('2015-12-24T12:23:00+0900').timezone; # <= 32400
+    my $log = Log::Minimal.new(:$timezone);
+    $log.critff("%s","foo"); # 2010-10-20T00:25:17+09:00 [CRITICAL] foo at lib/Example.pm6 line 10, example.p6 line 12
+
 SEE ALSO
 ========
 

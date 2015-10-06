@@ -122,10 +122,25 @@ method !log(LogLevel $log-level, Bool $full-trace, Bool $die, *@text) {
 
 our class Log::Minimal::Error is Exception {
     has Str $.message;
+    has DateTime $.time;
+    has LogLevel $.log-level;
+    has Str $.messages;
+    has Str $.trace;
+
+    method new(DateTime :$time, LogLevel :$log-level, Str :$messages, Str :$trace) {
+        return self.bless(
+            time      => $time,
+            log-level => $log-level,
+            messages  => $messages,
+            trace     => $trace,
+            message   => "$time [$log-level] $messages $trace",
+        );
+    }
 
     method message(Exception:D:) returns Str:D {
         return $!message;
     }
+
     method backtrace(Exception:D:) returns Backtrace:D {
         return Backtrace.new();
     }
@@ -146,7 +161,7 @@ method !die(DateTime :$time, LogLevel :$log-level, Str :$messages, Str :$trace) 
         return;
     }
 
-    Log::Minimal::Error.new(message => "$time [$log-level] $messages $trace").die;
+    Log::Minimal::Error.new(:$time, :$log-level, :$messages, :$trace).die;
 }
 
 =begin pod

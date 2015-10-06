@@ -33,12 +33,10 @@ subtest {
     my $log = Log::Minimal.new(:default_log_level(Log::Minimal::CRITICAL));
     {
         my $out = capture_stderr {
-            # $log.critf('critical');
             $log.warnf('warn');
             $log.infof('info');
             $log.debugf('debug');
 
-            # $log.critff('critical');
             $log.warnff('warn');
             $log.infoff('info');
             $log.debugff('debug');
@@ -58,3 +56,5 @@ subtest {
         is $out.defined, True;
     }
 }, 'when CRITICAL'
+
+done-testing;

@@ -25,3 +25,5 @@ subtest {
         is $log.autodump, False;
     }
 }, 'test for critf';
+
+done-testing;

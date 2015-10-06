@@ -32,3 +32,4 @@ subtest {
     }
 }, 'should be configurable env name';
 
+done-testing;

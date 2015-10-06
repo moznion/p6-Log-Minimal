@@ -20,7 +20,7 @@ SYNOPSIS
     $log.critff("%s","foo"); # 2010-10-20T00:25:17Z [CRITICAL] foo at lib/Example.pm6 line 10, example.p6 line 12
     $log.warnff("%d %s %s", 1, "foo", $uri);
     $log.infoff('foo');
-    $log.debugff("foo"); # print if $ENV{LM_DEBUG} is true value
+    $log.debugff("foo"); # print if %*ENV<LM_DEBUG> is true value
 
     # die with formatted message
     $log.errorf('foo');
@@ -97,16 +97,16 @@ die with formatted $message with stack trace
 CUSTOMIZATION
 =============
 
-`%*ENV<LM_DEBUG>` and `$.env_debug`
+`%*ENV<LM_DEBUG>` and `$.env-debug`
 -----------------------------------
 
 %*ENLM_DEBUG must be true if you want to print debugf and debugff messages.
 
-You can change variable name from LM_DEBUG to arbitrary string which is specified by `$.env_debug` in use instance.
+You can change variable name from LM_DEBUG to arbitrary string which is specified by `$.env-debug` in use instance.
 
     use Log::Minimal;
 
-    my $log = Log::Minimal.new(:env_debug('FOO_DEBUG'));
+    my $log = Log::Minimal.new(:env-debug('FOO_DEBUG'));
 
     %*ENV<LM_DEBUG>  = True;
     %*ENV<FOO_DEBUG> = False;
@@ -140,15 +140,15 @@ or
 To change the method of outputting the log, set `$.print` of instance.
 
     my $log = Log::Minimal.new;
-    $log.print = sub (:$time, :$log_level, :$messages, :$trace) {
-        note "[$log_level] $messages $trace"; # without time stamp
+    $log.print = sub (:$time, :$log-level, :$messages, :$trace) {
+        note "[$log-level] $messages $trace"; # without time stamp
     }
     $log.critf('foo'); # [CRITICAL] foo at example.p6 line 12;
 
 default is
 
-    sub (:$time, :$log_level, :$messages, :$trace) {
-        note "$time [$log_level] $messages $trace";
+    sub (:$time, :$log-level, :$messages, :$trace) {
+        note "$time [$log-level] $messages $trace";
     }
 
 `$.die`
@@ -157,24 +157,24 @@ default is
 To change the format of die message, set `$.die` of instance.
 
     my $log = Log::Minimal.new;
-    $log.print = sub (:$time, :$log_level, :$messages, :$trace) {
-        die "[$log_level] $messages"; # without time stamp and trace
+    $log.print = sub (:$time, :$log-level, :$messages, :$trace) {
+        die "[$log-level] $messages"; # without time stamp and trace
     }
     $log.errorf('foo');
 
 default is
 
-    sub (:$time, :$log_level, :$messages, :$trace) {
-        Log::Minimal::Error.new(message => "$time [$log_level] $messages $trace").die;
+    sub (:$time, :$log-level, :$messages, :$trace) {
+        Log::Minimal::Error.new(message => "$time [$log-level] $messages $trace").die;
     }
 
-`$.default_log_level`
+`$.default-log-level`
 ---------------------
 
 Level for output log.
 
     my $log = Log::Minimal.new;
-    $log.default_log_level = Log::Minimal::WARN;
+    $log.default-log-level = Log::Minimal::WARN;
     $log.infof("foo"); # print nothing
     $log.warnf("foo"); # print
 
@@ -191,12 +191,12 @@ Serialize message with `.perl`.
     temp $log.autodump = True;
     warnf("dump is %s", {foo=>'bar'}); # :foo("bar")
 
-`$.default_trace_level`
+`$.default-trace-level`
 -----------------------
 
 This variable determines how many additional call frames are to be skipped. Defaults to 0.
 
-`$.escape_whitespace`
+`$.escape-whitespace`
 ---------------------
 
 If this value is true, whitespace other than space will be represented as [\n\t\r]. Defaults to True.

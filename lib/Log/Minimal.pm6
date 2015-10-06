@@ -153,7 +153,7 @@ method !die(DateTime :$time, LogLevel :$log_level, Str :$messages, Str :$trace) 
 
 =head1 NAME
 
-Log::Minimal - Minimal logger for perl6
+Log::Minimal - Minimal and customizable logger for perl6
 
 =head1 SYNOPSIS
 

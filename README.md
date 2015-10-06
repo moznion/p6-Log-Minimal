@@ -1,7 +1,7 @@
 NAME [![Build Status](https://travis-ci.org/moznion/p6-Log-Minimal.svg?branch=master)](https://travis-ci.org/moznion/p6-Log-Minimal)
 ====
 
-Log::Minimal - Minimal logger for perl6
+Log::Minimal - Minimal and customizable logger for perl6
 
 SYNOPSIS
 ========

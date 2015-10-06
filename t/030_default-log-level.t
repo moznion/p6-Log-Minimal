@@ -55,6 +55,6 @@ subtest {
         };
         is $out.defined, True;
     }
-}, 'when CRITICAL'
+}, 'when CRITICAL';
 
 done-testing;

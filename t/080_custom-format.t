@@ -5,8 +5,8 @@ use Log::Minimal;
 
 subtest {
     my $log = Log::Minimal.new;
-    $log.print = sub (:$time, :$log_level, :$messages, :$trace) {
-        note "$trace $messages [$log_level] $time";
+    $log.print = sub (:$time, :$log-level, :$messages, :$trace) {
+        note "$trace $messages [$log-level] $time";
     }
 
     my $out = capture_stderr {

@@ -13,12 +13,12 @@ our $colors = {
     ERROR    => 'red on_black',
 };
 
-has LogLevel $.default_log_level is rw = DEBUG;
-has Bool $.escape_whitespace is rw = True;
+has LogLevel $.default-log-level is rw = DEBUG;
+has Bool $.escape-whitespace is rw = True;
 has Bool $.autodump is rw = False;
 has Bool $.color is rw = %*ENV<LM_COLOR> ?? True !! False;
-has Str $.env_debug is rw = "LM_DEBUG";
-has Int $.default_trace_level is rw = 0;
+has Str $.env-debug is rw = "LM_DEBUG";
+has Int $.default-trace-level is rw = 0;
 has Sub $.print is rw; # (DateTime :$time, Str :$messages, Str :$trace); <== not yet implemented...
 has Sub $.die is rw; # (DateTime :$time, Str :$messages, Str :$trace); <== not yet implemented...
 
@@ -35,14 +35,14 @@ method infof(*@text) {
 }
 
 method debugf(*@text) {
-    my Bool $env_debug = %*ENV{$.env_debug} ?? True !! False;
-    if $env_debug && DEBUG.value >= $.default_log_level.value {
+    my Bool $env-debug = %*ENV{$.env-debug} ?? True !! False;
+    if $env-debug && DEBUG.value >= $.default-log-level.value {
         self!log(DEBUG, False, False, @text);
     }
 }
 
 method errorf(*@text) {
-    temp $.default_log_level = DEBUG;
+    temp $.default-log-level = DEBUG;
     self!log(ERROR, False, True, @text);
 }
 
@@ -59,19 +59,19 @@ method infoff(*@text) {
 }
 
 method debugff(*@text) {
-    my Bool $env_debug = %*ENV{$.env_debug} ?? True !! False;
-    if $env_debug && DEBUG.value >= $.default_log_level.value {
+    my Bool $env-debug = %*ENV{$.env-debug} ?? True !! False;
+    if $env-debug && DEBUG.value >= $.default-log-level.value {
         self!log(DEBUG, True, False, @text);
     }
 }
 
 method errorff(*@text) {
-    temp $.default_log_level = DEBUG;
+    temp $.default-log-level = DEBUG;
     self!log(ERROR, True, True, @text);
 }
 
-method !log(LogLevel $log_level, Bool $full_trace, Bool $die, *@text) {
-    if $.default_log_level.value == 0 || $log_level.value < $.default_log_level.value {
+method !log(LogLevel $log-level, Bool $full-trace, Bool $die, *@text) {
+    if $.default-log-level.value == 0 || $log-level.value < $.default-log-level.value {
         # NOP: disabled by log level
         return;
     }
@@ -79,9 +79,9 @@ method !log(LogLevel $log_level, Bool $full_trace, Bool $die, *@text) {
     my $time = DateTime.new(now);
 
     my $trace = '';
-    if $full_trace {
+    if $full-trace {
         my @bts = ();
-        my $i = $.default_trace_level + 4;
+        my $i = $.default-trace-level + 4;
         loop {
             my $bt = callframe($i++);
             @bts.push($bt);
@@ -92,7 +92,7 @@ method !log(LogLevel $log_level, Bool $full_trace, Bool $die, *@text) {
             }
         }
     } else {
-        my $bt = callframe($.default_trace_level + 3);
+        my $bt = callframe($.default-trace-level + 3);
         $trace = sprintf('at %s line %s', $bt.file, $bt.line);
     }
 
@@ -103,20 +103,20 @@ method !log(LogLevel $log_level, Bool $full_trace, Bool $die, *@text) {
         $messages = sprintf(@text.shift, $.autodump ?? map { .perl }, @text !! @text);
     }
 
-    if ($.escape_whitespace) {
+    if ($.escape-whitespace) {
         $messages = $messages.subst(/\x0d/, '\r', :g);
         $messages = $messages.subst(/\x0a/, '\n', :g);
         $messages = $messages.subst(/\x09/, '\t', :g);
     }
 
     if ($.color) {
-        $messages = colored($messages, $colors{$log_level.key});
+        $messages = colored($messages, $colors{$log-level.key});
     }
 
     if ($die) {
-        self!die(:$time, :$log_level, :$messages, :$trace);
+        self!die(:$time, :$log-level, :$messages, :$trace);
     } else {
-        self!print(:$time, :$log_level, :$messages, :$trace);
+        self!print(:$time, :$log-level, :$messages, :$trace);
     }
 }
 
@@ -131,22 +131,22 @@ our class Log::Minimal::Error is Exception {
     }
 }
 
-method !print(DateTime :$time, LogLevel :$log_level, Str :$messages, Str :$trace) {
+method !print(DateTime :$time, LogLevel :$log-level, Str :$messages, Str :$trace) {
     if $.print {
-        $.print.(:$time, :$log_level, :$messages, :$trace);
+        $.print.(:$time, :$log-level, :$messages, :$trace);
         return;
     }
 
-    note "$time [$log_level] $messages $trace";
+    note "$time [$log-level] $messages $trace";
 }
 
-method !die(DateTime :$time, LogLevel :$log_level, Str :$messages, Str :$trace) {
+method !die(DateTime :$time, LogLevel :$log-level, Str :$messages, Str :$trace) {
     if $.die {
-        $.die.(:$time, :$log_level, :$messages, :$trace);
+        $.die.(:$time, :$log-level, :$messages, :$trace);
         return;
     }
 
-    Log::Minimal::Error.new(message => "$time [$log_level] $messages $trace").die;
+    Log::Minimal::Error.new(message => "$time [$log-level] $messages $trace").die;
 }
 
 =begin pod
@@ -169,7 +169,7 @@ Log::Minimal - Minimal and customizable logger for perl6
   $log.critff("%s","foo"); # 2010-10-20T00:25:17Z [CRITICAL] foo at lib/Example.pm6 line 10, example.p6 line 12
   $log.warnff("%d %s %s", 1, "foo", $uri);
   $log.infoff('foo');
-  $log.debugff("foo"); # print if $ENV{LM_DEBUG} is true value
+  $log.debugff("foo"); # print if %*ENV<LM_DEBUG> is true value
 
   # die with formatted message
   $log.errorf('foo');
@@ -236,15 +236,15 @@ die with formatted $message with stack trace
 
 =head1 CUSTOMIZATION
 
-=head2 C<%*ENV<LM_DEBUG>> and C<$.env_debug>
+=head2 C<%*ENV<LM_DEBUG>> and C<$.env-debug>
 
 %*ENV<LM_DEBUG> must be true if you want to print debugf and debugff messages.
 
-You can change variable name from LM_DEBUG to arbitrary string which is specified by C<$.env_debug> in use instance.
+You can change variable name from LM_DEBUG to arbitrary string which is specified by C<$.env-debug> in use instance.
 
   use Log::Minimal;
 
-  my $log = Log::Minimal.new(:env_debug('FOO_DEBUG'));
+  my $log = Log::Minimal.new(:env-debug('FOO_DEBUG'));
 
   %*ENV<LM_DEBUG>  = True;
   %*ENV<FOO_DEBUG> = False;
@@ -276,15 +276,15 @@ or
 To change the method of outputting the log, set C<$.print> of instance.
 
   my $log = Log::Minimal.new;
-  $log.print = sub (:$time, :$log_level, :$messages, :$trace) {
-      note "[$log_level] $messages $trace"; # without time stamp
+  $log.print = sub (:$time, :$log-level, :$messages, :$trace) {
+      note "[$log-level] $messages $trace"; # without time stamp
   }
   $log.critf('foo'); # [CRITICAL] foo at example.p6 line 12;
 
 default is
 
-  sub (:$time, :$log_level, :$messages, :$trace) {
-      note "$time [$log_level] $messages $trace";
+  sub (:$time, :$log-level, :$messages, :$trace) {
+      note "$time [$log-level] $messages $trace";
   }
 
 =head2 C<$.die>
@@ -292,23 +292,23 @@ default is
 To change the format of die message, set C<$.die> of instance.
 
   my $log = Log::Minimal.new;
-  $log.print = sub (:$time, :$log_level, :$messages, :$trace) {
-      die "[$log_level] $messages"; # without time stamp and trace
+  $log.print = sub (:$time, :$log-level, :$messages, :$trace) {
+      die "[$log-level] $messages"; # without time stamp and trace
   }
   $log.errorf('foo');
 
 default is
 
-  sub (:$time, :$log_level, :$messages, :$trace) {
-      Log::Minimal::Error.new(message => "$time [$log_level] $messages $trace").die;
+  sub (:$time, :$log-level, :$messages, :$trace) {
+      Log::Minimal::Error.new(message => "$time [$log-level] $messages $trace").die;
   }
 
-=head2 C<$.default_log_level>
+=head2 C<$.default-log-level>
 
 Level for output log.
 
   my $log = Log::Minimal.new;
-  $log.default_log_level = Log::Minimal::WARN;
+  $log.default-log-level = Log::Minimal::WARN;
   $log.infof("foo"); # print nothing
   $log.warnf("foo"); # print
 
@@ -326,12 +326,12 @@ Serialize message with C<.perl>.
   temp $log.autodump = True;
   warnf("dump is %s", {foo=>'bar'}); # :foo("bar")
 
-=head2 C<$.default_trace_level>
+=head2 C<$.default-trace-level>
 
 This variable determines how many additional call frames are to be skipped.
 Defaults to 0.
 
-=head2 C<$.escape_whitespace>
+=head2 C<$.escape-whitespace>
 
 If this value is true, whitespace other than space will be represented as [\n\t\r].
 Defaults to True.

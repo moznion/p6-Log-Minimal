@@ -4,7 +4,7 @@ use IO::Capture::Simple;
 use Log::Minimal;
 
 subtest {
-    my $log = Log::Minimal.new(:default_log_level(Log::Minimal::MUTE));
+    my $log = Log::Minimal.new(:default-log-level(Log::Minimal::MUTE));
     my $out = capture_stderr {
         $log.critf('critical');
         $log.warnf('warn');
@@ -21,16 +21,16 @@ subtest {
     dies-ok {
         $log.errorf('error');
     };
-    is $log.default_log_level, Log::Minimal::MUTE, 'should roll back the default_log_level';
+    is $log.default-log-level, Log::Minimal::MUTE, 'should roll back the default-log-level';
 
     dies-ok {
         $log.errorff('error');
     };
-    is $log.default_log_level, Log::Minimal::MUTE, 'should roll back the default_log_level';
+    is $log.default-log-level, Log::Minimal::MUTE, 'should roll back the default-log-level';
 }, 'when mute';
 
 subtest {
-    my $log = Log::Minimal.new(:default_log_level(Log::Minimal::CRITICAL));
+    my $log = Log::Minimal.new(:default-log-level(Log::Minimal::CRITICAL));
     {
         my $out = capture_stderr {
             $log.warnf('warn');

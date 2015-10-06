@@ -13,7 +13,7 @@ subtest {
 }, 'should not output log by DEBUG level';
 
 subtest {
-    my $log = Log::Minimal.new(:env_debug('LOG_MINIMAL_DEBUG'));
+    my $log = Log::Minimal.new(:env-debug('LOG_MINIMAL_DEBUG'));
 
     {
         temp %*ENV<LOG_MINIMAL_DEBUG> = 0;

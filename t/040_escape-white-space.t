@@ -12,7 +12,7 @@ subtest {
 }, 'default, escape white space';
 
 subtest {
-    my $log = Log::Minimal.new(:escape_whitespace(False));
+    my $log = Log::Minimal.new(:escape-whitespace(False));
     my $out = capture_stderr {
         $log.critf("s\r\n\te");
     };

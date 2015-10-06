@@ -5,7 +5,7 @@ use Log::Minimal;
 
 subtest {
     {
-        my $log = Log::Minimal.new(:autodump(True));
+        my $log = Log::Minimal.new(:autodump(True), :timezone(0));
         my $out = capture_stderr {
             $log.critf({foo => 'bar'});
         };
@@ -13,7 +13,7 @@ subtest {
     }
 
     {
-        my $log = Log::Minimal.new();
+        my $log = Log::Minimal.new(:timezone(0));
         {
             temp $log.autodump = True;
 

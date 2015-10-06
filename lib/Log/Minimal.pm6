@@ -21,6 +21,7 @@ has Str $.env-debug is rw = "LM_DEBUG";
 has Int $.default-trace-level is rw = 0;
 has Sub $.print is rw; # (DateTime :$time, Str :$messages, Str :$trace); <== not yet implemented...
 has Sub $.die is rw; # (DateTime :$time, Str :$messages, Str :$trace); <== not yet implemented...
+has Int $.timezone is rw = Nil;
 
 method critf(*@text) {
     self!log(CRITICAL, False, False, @text);
@@ -76,7 +77,12 @@ method !log(LogLevel $log-level, Bool $full-trace, Bool $die, *@text) {
         return;
     }
 
-    my $time = DateTime.new(now);
+    my $time;
+    if $.timezone.defined {
+        $time = DateTime.now(:timezone($.timezone));
+    } else {
+        $time = DateTime.now;
+    }
 
     my $trace = '';
     if $full-trace {
@@ -350,6 +356,17 @@ Defaults to 0.
 
 If this value is true, whitespace other than space will be represented as [\n\t\r].
 Defaults to True.
+
+=head2 C<$.timezone>
+
+Default, this value is Nil means Log::Minimal determines timezone automatically
+from your environment.
+
+If you specify this value, Log::Minimal uses that timezone.
+
+  my $timezone = DateTime.new('2015-12-24T12:23:00+0900').timezone; # <= 32400
+  my $log = Log::Minimal.new(:$timezone);
+  $log.critff("%s","foo"); # 2010-10-20T00:25:17+09:00 [CRITICAL] foo at lib/Example.pm6 line 10, example.p6 line 12
 
 =head1 SEE ALSO
 

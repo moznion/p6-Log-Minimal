@@ -4,7 +4,7 @@ use IO::Capture::Simple;
 use Log::Minimal;
 
 subtest {
-    my $log = Log::Minimal.new(:default-trace-level(2));
+    my $log = Log::Minimal.new(:default-trace-level(2), :timezone(0));
     my $out = capture_stderr {
         $log.critf('critical');
     };

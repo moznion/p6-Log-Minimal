@@ -4,7 +4,7 @@ use IO::Capture::Simple;
 use Log::Minimal;
 
 subtest {
-    my $log = Log::Minimal.new;
+    my $log = Log::Minimal.new(:timezone(0));
     my $out = capture_stderr {
         $log.critf("s\r\n\te");
     };
@@ -12,7 +12,7 @@ subtest {
 }, 'default, escape white space';
 
 subtest {
-    my $log = Log::Minimal.new(:escape-whitespace(False));
+    my $log = Log::Minimal.new(:escape-whitespace(False), :timezone(0));
     my $out = capture_stderr {
         $log.critf("s\r\n\te");
     };

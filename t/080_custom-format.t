@@ -4,7 +4,7 @@ use IO::Capture::Simple;
 use Log::Minimal;
 
 subtest {
-    my $log = Log::Minimal.new;
+    my $log = Log::Minimal.new(:timezone(0));
     $log.print = sub (:$time, :$log-level, :$messages, :$trace) {
         note "$trace $messages [$log-level] $time";
     }

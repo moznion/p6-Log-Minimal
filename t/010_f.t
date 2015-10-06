@@ -3,7 +3,7 @@ use Test;
 use IO::Capture::Simple;
 use Log::Minimal;
 
-my $log = Log::Minimal.new;
+my $log = Log::Minimal.new(:timezone(0));
 
 subtest {
     {

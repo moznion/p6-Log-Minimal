@@ -4,7 +4,7 @@ use IO::Capture::Simple;
 use Log::Minimal;
 
 subtest {
-    my $log = Log::Minimal.new();
+    my $log = Log::Minimal.new(:timezone(0));
     temp %*ENV<LM_DEBUG> = 0;
     my $out = capture_stderr {
         $log.debugf('debug');
@@ -13,7 +13,7 @@ subtest {
 }, 'should not output log by DEBUG level';
 
 subtest {
-    my $log = Log::Minimal.new(:env-debug('LOG_MINIMAL_DEBUG'));
+    my $log = Log::Minimal.new(:env-debug('LOG_MINIMAL_DEBUG'), :timezone(0));
 
     {
         temp %*ENV<LOG_MINIMAL_DEBUG> = 0;

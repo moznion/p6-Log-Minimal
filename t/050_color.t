@@ -4,7 +4,7 @@ use IO::Capture::Simple;
 use Log::Minimal;
 
 %*ENV<LM_COLOR> = True;
-my $log = Log::Minimal.new;
+my $log = Log::Minimal.new(:timezone(0));
 
 subtest {
     my $out = capture_stderr {

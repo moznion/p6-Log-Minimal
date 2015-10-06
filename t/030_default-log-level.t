@@ -4,7 +4,7 @@ use IO::Capture::Simple;
 use Log::Minimal;
 
 subtest {
-    my $log = Log::Minimal.new(:default-log-level(Log::Minimal::MUTE));
+    my $log = Log::Minimal.new(:default-log-level(Log::Minimal::MUTE), :timezone(0));
     my $out = capture_stderr {
         $log.critf('critical');
         $log.warnf('warn');
@@ -30,7 +30,7 @@ subtest {
 }, 'when mute';
 
 subtest {
-    my $log = Log::Minimal.new(:default-log-level(Log::Minimal::CRITICAL));
+    my $log = Log::Minimal.new(:default-log-level(Log::Minimal::CRITICAL), :timezone(0));
     {
         my $out = capture_stderr {
             $log.warnf('warn');

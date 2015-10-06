@@ -15,6 +15,7 @@ our $colors = {
 
 has LogLevel $.default_log_level is rw = DEBUG;
 has Bool $.escape_whitespace is rw = True;
+has Bool $.autodump is rw = False;
 has Bool $.color is rw = %*ENV<LM_COLOR> ?? True !! False;
 has Str $.env_debug is rw = "LM_DEBUG";
 has Int $.default_trace_level is rw = 0;
@@ -97,9 +98,9 @@ method !log(LogLevel $log_level, Bool $full_trace, Bool $die, *@text) {
 
     my $messages = '';
     if (@text == 1 && defined @text[0]) {
-        $messages ~= @text[0];
+        $messages ~= $.autodump ?? @text[0].perl !! @text[0];
     } elsif (@text >= 2)  {
-        $messages = sprintf(@text.shift, @text);
+        $messages = sprintf(@text.shift, $.autodump ?? map { .perl }, @text !! @text);
     }
 
     if ($.escape_whitespace) {

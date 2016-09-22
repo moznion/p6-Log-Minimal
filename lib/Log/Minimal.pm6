@@ -94,7 +94,10 @@ method !log(LogLevel $log-level, Bool $full-trace, Bool $die, *@text) {
         }
         CATCH {
             when 'ctxcaller needs an MVMContext' {
-                $trace = 'at ' ~ @bts[0..*-2].map(-> $bt {sprintf('%s line %s', $bt.file, $bt.line)}).join(', ');
+                $trace = 'at ' ~ @bts[0..*-2]
+					.grep({ $_.annotations ~~ Hash })
+					.map(-> $bt {sprintf('%s line %s', $bt.file, $bt.line)})
+					.join(', ');
             }
         }
     } else {

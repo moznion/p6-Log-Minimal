@@ -113,9 +113,8 @@ method !log(LogLevel $log-level, Bool $full-trace, Bool $die, *@text) {
     }
 
     if ($.escape-whitespace) {
-        $messages = $messages.subst(/\x0d/, '\r', :g);
-        $messages = $messages.subst(/\x0a/, '\n', :g);
-        $messages = $messages.subst(/\x09/, '\t', :g);
+		$messages = $messages.encode>>.&{ { 13 => '\r', 10 => '\n', 9 => '\t' }{$_} || $_.chr }.join;
+		# $messages.=subst(/<[\r\n\t]>/, { sprintf('\\x%02x', $_.ord) }, :g)
     }
 
     if ($.color) {

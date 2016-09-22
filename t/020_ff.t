@@ -5,25 +5,27 @@ use Log::Minimal;
 
 my $log = Log::Minimal.new(:timezone(0));
 
+my regex timestamp { \d ** 4 '-' \d ** 2 '-' \d ** 2 'T' \d ** 2 ':' \d ** 2 ':' \d ** 2 '.' \d+ 'Z' };
+
 subtest {
     my $out = capture_stderr {
         $log.critff('critical');
     };
-    like $out, rx{^<[0..9]> ** 4\-<[0..9]> ** 2\-<[0..9]> ** 2T<[0..9]> ** 2\:<[0..9]> ** 2\:<[0..9]> ** 2Z' '\[CRITICAL\]' 'critical' 'at' 't\/020_ff\.t' 'line' '10 ',' .+\n$};
+    like $out, rx{^ <timestamp> ' [CRITICAL] critical at t/020_ff.t line 12, ' .+ \n $};
 }, 'test for critf';
 
 subtest {
     my $out = capture_stderr {
         $log.warnff('warn');
     };
-    like $out, rx{^<[0..9]> ** 4\-<[0..9]> ** 2\-<[0..9]> ** 2T<[0..9]> ** 2\:<[0..9]> ** 2\:<[0..9]> ** 2Z' '\[WARN\]' 'warn' 'at' 't\/020_ff\.t' 'line' '17 ',' .+\n$};
+    like $out, rx{^ <timestamp> ' [WARN] warn at t/020_ff.t line 19, ' .+ \n $};
 }, 'test for warnff';
 
 subtest {
     my $out = capture_stderr {
         $log.infoff('info');
     };
-    like $out, rx{^<[0..9]> ** 4\-<[0..9]> ** 2\-<[0..9]> ** 2T<[0..9]> ** 2\:<[0..9]> ** 2\:<[0..9]> ** 2Z' '\[INFO\]' 'info' 'at' 't\/020_ff\.t' 'line' '24 ',' .+\n$};
+    like $out, rx{^ <timestamp> ' [INFO] info at t/020_ff.t line 26, ' .+ \n $};
 }, 'test for infoff';
 
 subtest {
@@ -31,7 +33,7 @@ subtest {
     my $out = capture_stderr {
         $log.debugff('debug');
     };
-    like $out, rx{^<[0..9]> ** 4\-<[0..9]> ** 2\-<[0..9]> ** 2T<[0..9]> ** 2\:<[0..9]> ** 2\:<[0..9]> ** 2Z' '\[DEBUG\]' 'debug' 'at' 't\/020_ff\.t' 'line' '32 ',' .+\n$};
+    like $out, rx{^ <timestamp> ' [DEBUG] debug at t/020_ff.t line 34, ' .+ \n $};
 }, 'test for debugff';
 
 subtest {

@@ -21,25 +21,27 @@ my $FILE = 't/020_ff.t';
 
 my $log = Log::Minimal.new(:timezone(0));
 
+my regex timestamp { \d ** 4 '-' \d ** 2 '-' \d ** 2 'T' \d ** 2 ':' \d ** 2 ':' \d ** 2 '.' \d+ 'Z' };
+
 subtest {
     my $out = capture_stderr {
         $log.critff('critical');
     };
-    like $out, rx{^<$DATETIME>" [CRITICAL] critical at $FILE line "<{$?LINE - 2}> \, .+$};
+    like $out, rx{^ <timestamp> ' [CRITICAL] critical at t/020_ff.t line 28, ' .+ \n $};
 }, 'test for critf';
 
 subtest {
     my $out = capture_stderr {
         $log.warnff('warn');
     };
-    like $out, rx{^<$DATETIME>" [WARN] warn at $FILE line "<{$?LINE - 2}> \, .+$};
+    like $out, rx{^ <timestamp> ' [WARN] warn at t/020_ff.t line 35, ' .+ \n $};
 }, 'test for warnff';
 
 subtest {
     my $out = capture_stderr {
         $log.infoff('info');
     };
-    like $out, rx{^<$DATETIME>" [INFO] info at $FILE line "<{$?LINE - 2}> \, .+$};
+    like $out, rx{^ <timestamp> ' [INFO] info at t/020_ff.t line 42, ' .+ \n $};
 }, 'test for infoff';
 
 subtest {
@@ -47,7 +49,7 @@ subtest {
     my $out = capture_stderr {
         $log.debugff('debug');
     };
-    like $out, rx{^<$DATETIME>" [DEBUG] debug at $FILE line "<{$?LINE - 2}> \, .+$};
+    like $out, rx{^ <timestamp> ' [DEBUG] debug at t/020_ff.t line 50, ' .+ \n $};
 }, 'test for debugff';
 
 subtest {

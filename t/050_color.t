@@ -3,21 +3,7 @@ use Test;
 use IO::Capture::Simple;
 use Log::Minimal;
 
-my $DATETIME = rx/
-    (<[+-]>? \d**4 \d*)                            # year
-    '-'
-    (\d\d)                                         # month
-    '-'
-    (\d\d)                                         # day
-    <[Tt]>                                         # time separator
-    (\d\d)                                         # hour
-    ':'
-    (\d\d)                                         # minute
-    ':'
-    (\d\d[<[\.,]>\d ** 1..6]?)                     # second
-    (<[Zz]> || (<[\-\+]>) (\d\d) (':'? (\d\d))? )? # timezone
-/;
-my $FILE = 't/050_color.t';
+my regex timestamp { \d ** 4 '-' \d ** 2 '-' \d ** 2 'T' \d ** 2 ':' \d ** 2 ':' \d ** 2 '.' \d+ 'Z' };
 
 %*ENV<LM_COLOR> = True;
 my $log = Log::Minimal.new(:timezone(0));
@@ -27,9 +13,10 @@ subtest {
         $log.critf('critical');
     };
 
-    if $out ~~ m{^<$DATETIME>" [CRITICAL] "(.+)" at $FILE line "<{$?LINE - 3}>\n$} {
+    if $out ~~ m{^ <timestamp> ' [CRITICAL] ' (.+) ' at t/050_color.t line 13' \n $} {
         is $0, "\x[1b][30;41mcritical\x[1b][0m";
     } else {
+		$0.encode.note;
         ok False, 'Not matched to regex';
     };
 }, 'test for critf';
@@ -39,7 +26,7 @@ subtest {
         $log.warnf('warn');
     };
 
-    if $out ~~ m{^<$DATETIME>" [WARN] "(.+)" at $FILE line "<{$?LINE - 3}>\n$} {
+    if $out ~~ rx{^ <timestamp> ' [WARN] ' (.+) ' at t/050_color.t line 26' \n $} {
         is $0, "\x[1b][30;43mwarn\x[1b][0m";
     } else {
         ok False, 'Not matched to regex';
@@ -51,7 +38,7 @@ subtest {
         $log.infof('info');
     };
 
-    if $out ~~ m{^<$DATETIME>" [INFO] "(.+)" at $FILE line "<{$?LINE - 3}>\n$} {
+    if $out ~~ rx{^ <timestamp> ' [INFO] ' (.+) ' at t/050_color.t line 38' \n $} {
         is $0, "\x[1b][32minfo\x[1b][0m";
     } else {
         ok False, 'Not matched to regex';
@@ -64,7 +51,7 @@ subtest {
         $log.debugf('debug');
     };
 
-    if $out ~~ m{^<$DATETIME>" [DEBUG] "(.+)" at $FILE line "<{$?LINE - 3}>\n$} {
+    if $out ~~ rx{^ <timestamp> ' [DEBUG] ' (.+) ' at t/050_color.t line 51' \n $} {
         is $0, "\x[1b][31;47mdebug\x[1b][0m";
     } else {
         ok False, 'Not matched to regex';

@@ -3,21 +3,7 @@ use Test;
 use IO::Capture::Simple;
 use Log::Minimal;
 
-my $DATETIME = rx/
-    (<[+-]>? \d**4 \d*)                            # year
-    '-'
-    (\d\d)                                         # month
-    '-'
-    (\d\d)                                         # day
-    <[Tt]>                                         # time separator
-    (\d\d)                                         # hour
-    ':'
-    (\d\d)                                         # minute
-    ':'
-    (\d\d[<[\.,]>\d ** 1..6]?)                     # second
-    (<[Zz]> || (<[\-\+]>) (\d\d) (':'? (\d\d))? )? # timezone
-/;
-my $FILE = 't/090_autodump.t';
+my regex timestamp { \d ** 4 '-' \d ** 2 '-' \d ** 2 'T' \d ** 2 ':' \d ** 2 ':' \d ** 2 '.' \d+ 'Z' };
 
 subtest {
     {
@@ -25,7 +11,7 @@ subtest {
         my $out = capture_stderr {
             $log.critf({foo => 'bar'});
         };
-        like $out, rx{^<$DATETIME>' [CRITICAL] :foo("bar")'" at $FILE line "<{$?LINE - 2}>\n$};
+        like $out, rx{^ <timestamp>  ' [CRITICAL] :foo("bar") at t/090_autodump.t line 12' \n $};
     }
 
     {
@@ -36,7 +22,7 @@ subtest {
             my $out = capture_stderr {
                 $log.critf('%s', {foo => 'bar'});
             };
-            like $out, rx{^<$DATETIME>' [CRITICAL] :foo("bar")'" at $FILE line "<{$?LINE - 2}>\n$};
+            like $out, rx{^ <timestamp> ' [CRITICAL] :foo("bar") at t/090_autodump.t line 23' \n $};
         }
         is $log.autodump, False;
     }

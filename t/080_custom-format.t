@@ -3,21 +3,7 @@ use Test;
 use IO::Capture::Simple;
 use Log::Minimal;
 
-my $DATETIME = rx/
-    (<[+-]>? \d**4 \d*)                            # year
-    '-'
-    (\d\d)                                         # month
-    '-'
-    (\d\d)                                         # day
-    <[Tt]>                                         # time separator
-    (\d\d)                                         # hour
-    ':'
-    (\d\d)                                         # minute
-    ':'
-    (\d\d[<[\.,]>\d ** 1..6]?)                     # second
-    (<[Zz]> || (<[\-\+]>) (\d\d) (':'? (\d\d))? )? # timezone
-/;
-my $FILE = 't/080_custom-format.t';
+my regex timestamp { \d ** 4 '-' \d ** 2 '-' \d ** 2 'T' \d ** 2 ':' \d ** 2 ':' \d ** 2 '.' \d+ 'Z' };
 
 subtest {
     my $log = Log::Minimal.new(:timezone(0));
@@ -28,7 +14,7 @@ subtest {
     my $out = capture_stderr {
         $log.warnf('msg');
     }
-    like $out, rx{"at $FILE line "<{$?LINE - 2}>' msg [WARN] '<$DATETIME>\n};
+    like $out, rx{'at t/080_custom-format.t line 15 msg [WARN] ' <timestamp> \n $}
 }, 'custom print';
 
 done-testing;

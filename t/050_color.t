@@ -3,6 +3,22 @@ use Test;
 use IO::Capture::Simple;
 use Log::Minimal;
 
+my $DATETIME = rx/
+    (<[+-]>? \d**4 \d*)                            # year
+    '-'
+    (\d\d)                                         # month
+    '-'
+    (\d\d)                                         # day
+    <[Tt]>                                         # time separator
+    (\d\d)                                         # hour
+    ':'
+    (\d\d)                                         # minute
+    ':'
+    (\d\d[<[\.,]>\d ** 1..6]?)                     # second
+    (<[Zz]> || (<[\-\+]>) (\d\d) (':'? (\d\d))? )? # timezone
+/;
+my $FILE = 't/050_color.t';
+
 %*ENV<LM_COLOR> = True;
 my $log = Log::Minimal.new(:timezone(0));
 
@@ -11,7 +27,7 @@ subtest {
         $log.critf('critical');
     };
 
-    if $out ~~ m{^<[0..9]> ** 4\-<[0..9]> ** 2\-<[0..9]> ** 2T<[0..9]> ** 2\:<[0..9]> ** 2\:<[0..9]> ** 2Z' '\[CRITICAL\]' '(.+)' 'at' 't\/050_color\.t' 'line' '11\n$} {
+    if $out ~~ m{^<$DATETIME>" [CRITICAL] "(.+)" at $FILE line "<{$?LINE - 3}>\n$} {
         is $0, "\x[1b][30;41mcritical\x[1b][0m";
     } else {
         ok False, 'Not matched to regex';
@@ -23,7 +39,7 @@ subtest {
         $log.warnf('warn');
     };
 
-    if $out ~~ rx{^<[0..9]> ** 4\-<[0..9]> ** 2\-<[0..9]> ** 2T<[0..9]> ** 2\:<[0..9]> ** 2\:<[0..9]> ** 2Z' '\[WARN\]' '(.+)' 'at' 't\/050_color\.t' 'line' '23\n$} {
+    if $out ~~ m{^<$DATETIME>" [WARN] "(.+)" at $FILE line "<{$?LINE - 3}>\n$} {
         is $0, "\x[1b][30;43mwarn\x[1b][0m";
     } else {
         ok False, 'Not matched to regex';
@@ -35,7 +51,7 @@ subtest {
         $log.infof('info');
     };
 
-    if $out ~~ rx{^<[0..9]> ** 4\-<[0..9]> ** 2\-<[0..9]> ** 2T<[0..9]> ** 2\:<[0..9]> ** 2\:<[0..9]> ** 2Z' '\[INFO\]' '(.+)' 'at' 't\/050_color\.t' 'line' '35\n$} {
+    if $out ~~ m{^<$DATETIME>" [INFO] "(.+)" at $FILE line "<{$?LINE - 3}>\n$} {
         is $0, "\x[1b][32minfo\x[1b][0m";
     } else {
         ok False, 'Not matched to regex';
@@ -48,7 +64,7 @@ subtest {
         $log.debugf('debug');
     };
 
-    if $out ~~ rx{^<[0..9]> ** 4\-<[0..9]> ** 2\-<[0..9]> ** 2T<[0..9]> ** 2\:<[0..9]> ** 2\:<[0..9]> ** 2Z' '\[DEBUG\]' '(.+)' 'at' 't\/050_color\.t' 'line' '48\n$} {
+    if $out ~~ m{^<$DATETIME>" [DEBUG] "(.+)" at $FILE line "<{$?LINE - 3}>\n$} {
         is $0, "\x[1b][31;47mdebug\x[1b][0m";
     } else {
         ok False, 'Not matched to regex';

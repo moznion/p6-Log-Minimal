@@ -88,8 +88,8 @@ method !log(LogLevel $log-level, Bool $full-trace, Bool $die, *@text) {
     if $full-trace {
         my @bts = ();
         my $i = $.default-trace-level + 4;
-        loop {
-            my $bt = callframe($i++);
+        repeat until $i == 0 {
+            my $bt = callframe($i--);
             @bts.push($bt);
         }
         CATCH {
